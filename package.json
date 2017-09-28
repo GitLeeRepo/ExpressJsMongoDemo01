@@ -1,0 +1,26 @@
+{
+  "name": "express_sandbox",
+  "version": "1.0.0",
+  "description": "Sandbox app for learning ExpressJS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "ejs": "^2.5.7",
+    "express": "*",
+    "express-validator": "^4.2.1",
+    "mongojs": "^2.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GitLeeRepo/ExpressJsSandbox.git"
+  },
+  "author": "Traeven",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GitLeeRepo/ExpressJsSandbox/issues"
+  },
+  "homepage": "https://github.com/GitLeeRepo/ExpressJsSandbox#readme"
+}
