@@ -66,13 +66,16 @@ app.use(expressValidator({
 // you would use post for POST requests
 app.get('/', function(req, res){
     db.users.find(function (err, docs) {
-        res.render('index', { title:"Users",
-            users: docs });
+        res.render('index', 
+        { 
+            title:"Users",
+            users: docs
+        });
     });
 
 })
 
-app.post('/users/add', function(req, res) {
+app.post('/', function(req, res) {
 
     req.checkBody('first_name', 'First Name is required').notEmpty();
     req.checkBody('last_name', 'Last Name is required').notEmpty();
@@ -82,12 +85,14 @@ app.post('/users/add', function(req, res) {
 
     if (errors) {
         console.log('ERRORS');
-        res.render('index', 
-        { 
-            title:"Users",
-            users: users,
-            errors: errors 
-        }); 
+        db.users.find(function (err, docs) {            
+            res.render('index', 
+            { 
+                title:"Users",
+                users: docs,
+                errors: errors 
+            }); 
+        });
     }
     else {
         var newUser = {
@@ -99,9 +104,8 @@ app.post('/users/add', function(req, res) {
             if (err) {
                 console.log(err);
             }
-            res.redirect('/');
         });
-        console.log('SUCCESS');        
+        res.redirect('/');              
     }
 })
 
@@ -110,10 +114,21 @@ app.delete('/users/delete/:id', function(req, res){
         if (err){
             console.log(err);
         }
+        else {
+            res.statusCode = 200;
+            res.m
+            console.log(result.n + ' user(s) deleted');
+        }
     });
+    console.log('delete: ' + req.params.id + ' - status: ' + res.statusCode);    
     res.redirect('/');
-    console.log(req.params.id);
 })
+
+app.delete('/', function(req, res){
+    // do nothing.  catching the redirect after the /users/delete
+    res.end();
+})
+
 
 /* ----- Listener ----- */
 
