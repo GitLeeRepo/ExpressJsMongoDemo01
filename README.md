@@ -21,3 +21,5 @@ Example code written from following along with the [ExpressJS Crash Course](http
     * ejs - for view engine
 
 * Using MVC concepts with the views, database, and middleware
+
+* Using HTTP GET, POST, and DELETE through the express app.get(), app.post(), and app.delete() methods
