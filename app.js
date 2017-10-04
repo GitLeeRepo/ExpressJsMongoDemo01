@@ -3,24 +3,24 @@
  * By Traversy Media
  */
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var path = require('path');
-var expressValidator = require('express-validator');
-var mongojs = require('mongojs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const expressValidator = require('express-validator');
+const mongojs = require('mongojs');
 
-var app = express();
-var db = mongojs('customerapp', ['users']);
-var ObjectId = mongojs.ObjectId;
+const app = express();
+const db = mongojs('customerapp', ['users']);
+let ObjectId = mongojs.ObjectId;
 
 
 /* ===== Middleware ===== */
 
 // custom middleware
-var logger = function(req, res, next) {
+let logger = function(req, res, next) {
     console.log('Logging...');
     next();
-}
+};
 app.use(logger);
 
 // body-parser middleware
@@ -35,7 +35,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Global Var middleware for Express Validator
-app.use(function(req, res, next){
+app.use((req, res, next)=>{
     // define errors to be globally accessible through res
     res.locals.errors = null; 
     next();
@@ -44,116 +44,117 @@ app.use(function(req, res, next){
 // Exress validator middleware
 app.use(expressValidator({
     errorFormatter: function(param, msg, value) {
-        var namespace = param.split('.')
-        , root    = namespace.shift()
-        , formParam = root;
+        let namespace = param.split('.')
+            , root    = namespace.shift()
+            , formParam = root;
   
-      while(namespace.length) {
-        formParam += '[' + namespace.shift() + ']';
-      }
-      return {
-        param : formParam,
-        msg   : msg,
-        value : value
-      };
+        while(namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param : formParam,
+            msg   : msg,
+            value : value
+        };
     }
-  }));
+}));
 
 
 /* ===== Route handlers ===== */
 
 // handling GET requests to document root, 
 // you would use post for POST requests
-app.get('/', function(req, res){
-    db.users.find(function (err, docs) {
+app.get('/', (req, res)=>{
+    db.users.find( (err, docs)=> {
         res.render('index', 
-        { 
-            title:"Users",
-            users: docs
-        });
+            { 
+                title:'Users',
+                users: docs
+            });
     });
 
-})
+});
 
-app.post('/', function(req, res) {
+app.post('/', (req, res) =>{
 
     req.checkBody('first_name', 'First Name is required').notEmpty();
     req.checkBody('last_name', 'Last Name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
 
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if (errors) {
         console.log('ERRORS');
-        db.users.find(function (err, docs) {            
+        db.users.find( (err, docs)=> {            
             res.render('index', 
-            { 
-                title:"Users",
-                users: docs,
-                errors: errors 
-            }); 
+                { 
+                    title:'Users',
+                    users: docs,
+                    errors: errors 
+                }); 
         });
     }
     else {
-        var newUser = {
+        let newUser = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             email: req.body.email
-        }
-        db.users.insert(newUser, function(err, result){
+        };
+        db.users.insert(newUser, (err)=>{
             if (err) {
                 console.log(err);
             }
         });
         res.redirect('/');              
     }
-})
+});
 
-app.delete('/users/delete/:id', function(req, res){
-    db.users.remove({ _id: ObjectId(req.params.id)}, function(err, result){
+app.delete('/users/delete/:id', (req, res)=>{
+    db.users.remove({ _id: ObjectId(req.params.id)}, (err, result)=>{
         if (err){
             console.log(err);
         }
         else {
             res.statusCode = 200;
-            res.m
             console.log(result.n + ' user(s) deleted');
         }
     });
     console.log('delete: ' + req.params.id + ' - status: ' + res.statusCode);    
     res.redirect('/');
-})
+});
 
-app.delete('/', function(req, res){
+app.delete('/', (req, res)=>{
     // do nothing.  catching the redirect after the /users/delete
     res.end();
-})
+});
 
 
 /* ----- Listener ----- */
 
-app.listen(3000, function() {
+app.listen(3000, ()=> {
     console.log('Server started on port 3000');
-})
+});
 
 // Initial Test data - not used after connecting to MongoDB
-var users = [
+/*
+let users = [
     { 
-      id: 1,
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'jdoe@example.com'
+        id: 1,
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'jdoe@example.com'
     },
     { 
         id: 2,
         first_name: 'Bill',
         last_name: 'Will',
         email: 'bwill@example.com'
-      },
-      { 
+    },
+    { 
         id: 3,
         first_name: 'Megan',
         last_name: 'Flower',
         email: 'mflower@example.com'
-      }
+    }
 ];
+*/
