@@ -1,6 +1,8 @@
 /* This code is base on the Express Crash Course YouTube video
  * https://www.youtube.com/watch?v=gnsO8-xJ8rs
- * By Traversy Media
+ * by Traversy Media.  Updated by me to ES6 notation,
+ * along with misc other changes from the original,
+ * including some changes to routes.
  */
 
 const express = require('express');
