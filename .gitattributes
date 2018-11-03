@@ -1,0 +1,5 @@
+# ensure a lf only ending when checkout, even on Windows
+*       text eol=lf
+*.png   -text
+*.jpg   -text
+*.pdf   -text
